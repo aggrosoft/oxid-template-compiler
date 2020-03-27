@@ -1,0 +1,21 @@
+{
+  "name": "aggrosoft/oxid-template-compiler",
+  "type": "oxideshop-module",
+  "description": "Compile SCSS and JS Files through Oxid Admin Backend",
+  "license": "MIT",
+  "require": {
+    "scssphp/scssphp": "^1.0.8"
+  },
+  "authors": [
+    {
+      "name": "Alexander Kludt",
+      "homepage": "https://github.com/aggrosoft"
+    }
+  ],
+  "extra": {
+    "oxideshop": {
+      "source-directory": "copy_this/modules/templatecompiler/",
+      "target-directory": "templatecompiler"
+    }
+  }
+}
