@@ -7,6 +7,7 @@ $iLangNr = 0;
 // -------------------------------
 $aLang = array(
     'charset' => 'UTF-8',
-    'THEME_COMPILE' => 'Template CSS neu kompilieren',
+    'THEME_COMPILE' => 'Template CSS neu erstellen',
+    'THEME_COMPILE_SCRIPTS' => 'Template Javascript neu erstellen',
     'THEME_INITIALIZE' => 'Template Initialisieren',
 );

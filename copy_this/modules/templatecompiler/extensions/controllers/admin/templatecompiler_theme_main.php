@@ -5,6 +5,7 @@ use ScssPhp\ScssPhp\Compiler;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\StringAsset;
 use Assetic\Filter\ScssphpFilter;
+use Assetic\Filter\JSqueezeFilter;
 use Assetic\Filter\UglifyCssFilter;
 
 class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
@@ -51,14 +52,66 @@ class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
                 return;
             }
 
-
             $sOutPath = \OxidEsales\Eshop\Core\Registry::getConfig()->getOutDir() . $sTheme . "/src/css/";
             $sOutFile = $sOutPath . 'styles.min.css';
 
             file_put_contents($sOutFile, $css);
         }
+    }
 
+    public function compilescripts() {
+        $sTheme = $this->getEditObjectId();
 
+        /** @var \OxidEsales\Eshop\Core\Theme $oTheme */
+        $oTheme = oxNew(\OxidEsales\Eshop\Core\Theme::class);
+        if (!$oTheme->load($sTheme)) {
+            \OxidEsales\Eshop\Core\Registry::getUtilsView()->addErrorToDisplay(oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class, 'EXCEPTION_THEME_NOT_LOADED'));
+            return;
+        }
+
+        $sJsPath = \OxidEsales\Eshop\Core\Registry::getConfig()->getViewsDir() . $sTheme . "/build/js/";
+
+        $sParent = $oTheme->getInfo('parentTheme');
+        if ($sParent) {
+            $sParentJsPath = \OxidEsales\Eshop\Core\Registry::getConfig()->getViewsDir() . $sParent . "/build/js/";
+        }
+
+        $assets = [
+            'node_modules/jquery/dist/jquery.min.js',
+            'build/vendor/jquery-ui/js/jquery-ui.js',
+            'node_modules/popper.js/dist/umd/popper.min.js',
+            'node_modules/bootstrap/dist/js/bootstrap.bundle.js',
+            'build/vendor/jquery-unveil/js/jquery.unveil.js',
+            'build/vendor/jquery-flexslider2/js/jquery.flexslider.js',
+            'build/vendor/jquery-bootstrap-validation/js/jqBootstrapValidation.js',
+            'build/js/main.js',
+            'build/js/pages/compare.js',
+            'build/js/pages/details.js',
+            'build/js/pages/review.js',
+            'build/js/pages/start.js'
+        ];
+
+        $collection = new AssetCollection([], new JSqueezeFilter());
+
+        foreach($assets as $asset) {
+            if (file_exists($sJsPath.$asset)){
+                $collection->add(new FileAsset($sJsPath.$asset));
+            }elseif($sParent && file_exists($sParentJsPath.$asset)){
+                $collection->add(new FileAsset($sParentJsPath.$asset));
+            }
+        }
+
+        try{
+            $js = $collection->dump();
+        } catch (\Exception $e) {
+            \OxidEsales\Eshop\Core\Registry::getUtilsView()->addErrorToDisplay($e->getMessage());
+            return;
+        }
+
+        $sOutPath = \OxidEsales\Eshop\Core\Registry::getConfig()->getOutDir() . $sTheme . "/src/js/";
+        $sOutFile = $sOutPath . 'script.min.js';
+
+        file_put_contents($sOutFile, $js);
     }
 
     public function initializetheme () {
@@ -102,7 +155,6 @@ class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
 
             exec('cp -r ' . $themeDir . 'build/ ' . $sThemePath);
             exec('cp ' . $themeDir.'package.json ' . $sThemePath);
-
         }
 
         if ( !is_dir($sThemePath.'/node_modules/')) {
