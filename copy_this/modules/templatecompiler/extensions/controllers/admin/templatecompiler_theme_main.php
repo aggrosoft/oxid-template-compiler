@@ -3,7 +3,7 @@
 use ScssPhp\ScssPhp\Compiler;
 
 use Assetic\Asset\AssetCollection;
-use Assetic\Asset\FileAsset;
+use Assetic\Asset\StringAsset;
 use Assetic\Filter\ScssphpFilter;
 use Assetic\Filter\UglifyCssFilter;
 
@@ -35,12 +35,13 @@ class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
 
             $filter = new ScssphpFilter();
             $filter->setFormatter(\ScssPhp\ScssPhp\Formatter\Crunched::class);
+            $filter->addImportPath($sScssPath);
             if ($sParent) {
                 $filter->addImportPath($sParentScssPath);
             }
 
             $collection = new AssetCollection(array(
-                new FileAsset($blHasThemeStyleScss ? $sFilePath : $sParentFilePath, array($filter))
+                new StringAsset(file_get_contents($blHasThemeStyleScss ? $sFilePath : $sParentFilePath), array($filter))
             ));
 
             try{
