@@ -2,6 +2,11 @@
 
 use ScssPhp\ScssPhp\Compiler;
 
+use Assetic\Asset\AssetCollection;
+use Assetic\Asset\FileAsset;
+use Assetic\Filter\ScssphpFilter;
+use Assetic\Filter\UglifyCssFilter;
+
 class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
 
     public function compiletheme() {
@@ -27,12 +32,19 @@ class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
         $blHasParentStyleScss = $sParent ? file_exists($sParentFilePath) : false;
 
         if ($blHasThemeStyleScss || $blHasParentStyleScss) {
-            $scss = new Compiler();
-            $scss->setImportPaths($sParent ? [$sScssPath, $sParentScssPath] : $sScssPath);
-            $scss->setFormatter(\ScssPhp\ScssPhp\Formatter\Crunched::class);
+
+            $filter = new ScssphpFilter();
+            $filter->setFormatter(\ScssPhp\ScssPhp\Formatter\Crunched::class);
+            if ($sParent) {
+                $filter->addImportPath($sParentScssPath);
+            }
+
+            $collection = new AssetCollection(array(
+                new FileAsset($blHasThemeStyleScss ? $sFilePath : $sParentFilePath, array($filter))
+            ));
 
             try{
-                $css = $scss->compile(file_get_contents($blHasThemeStyleScss ? $sFilePath : $sParentFilePath));
+                $css = $collection->dump();
             } catch (\Exception $e) {
                 \OxidEsales\Eshop\Core\Registry::getUtilsView()->addErrorToDisplay($e->getMessage());
                 return;
@@ -43,8 +55,9 @@ class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
             $sOutFile = $sOutPath . 'styles.min.css';
 
             file_put_contents($sOutFile, $css);
-
         }
+
+
     }
 
     public function initializetheme () {

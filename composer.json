@@ -3,8 +3,10 @@
   "type": "oxideshop-module",
   "description": "Compile SCSS and JS Files through Oxid Admin Backend",
   "license": "MIT",
+  "version": "1.1.0",
   "require": {
-    "scssphp/scssphp": "^1.0.8"
+    "scssphp/scssphp": "^1.1.0",
+    "assetic/framework": "dev-2.0/dev"
   },
   "authors": [
     {
