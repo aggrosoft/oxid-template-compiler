@@ -7,7 +7,7 @@
   "require": {
     "scssphp/scssphp": "^1.1.0",
     "patchwork/jsqueeze": "~2.0",
-    "assetic/framework": "~2.0"
+    "assetic/framework": "~2.0.0"
   },
   "authors": [
     {
