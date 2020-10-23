@@ -7,7 +7,7 @@ $aModule = array(
     'title'        => 'Template Compiler',
     'description'  => 'Compile oxid eShop template assets through admin interface',
     'thumbnail'    => '',
-    'version'      => '1.1.0',
+    'version'      => '1.1.1',
     'author'       => 'Aggrosoft GmbH',
     'extend'      => array(
         'theme_main' => 'templatecompiler/extensions/controllers/admin/templatecompiler_theme_main'
@@ -25,6 +25,7 @@ $aModule = array(
         array('group' => 'templatecompiler_environment', 'name' => 'sPath', 'type' => 'str',   'value' => ''),
         array('group' => 'templatecompiler_environment', 'name' => 'sGitExecutable', 'type' => 'str',   'value' => 'git'),
         array('group' => 'templatecompiler_environment', 'name' => 'sNpmExecutable', 'type' => 'str',   'value' => 'npm'),
+        array('group' => 'templatecompiler_environment', 'name' => 'aExtraCSSFiles', 'type' => 'aarr',   'value' => []),
     ),
     'blocks' => array(
         [

@@ -58,6 +58,36 @@ class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
 
             file_put_contents($sOutFile, $css);
         }
+
+        // Compile extra css files
+        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $aExtraCSSFiles = $config->getShopConfVar("aExtraCSSFiles", null, 'module:templatecompiler');
+
+        foreach ($aExtraCSSFiles as $sInputName => $sOutputName) {
+            $filter = new ScssphpFilter();
+            $filter->setFormatter(\ScssPhp\ScssPhp\Formatter\Crunched::class);
+            $filter->addImportPath($sScssPath);
+            if ($sParent) {
+                $filter->addImportPath($sParentScssPath);
+            }
+
+            $sFilePath = $sScssPath . $sInputName;
+            $collection = new AssetCollection(array(
+                new StringAsset(file_get_contents($sFilePath), array($filter))
+            ));
+
+            try{
+                $css = $collection->dump();
+            } catch (\Exception $e) {
+                \OxidEsales\Eshop\Core\Registry::getUtilsView()->addErrorToDisplay($e->getMessage());
+                return;
+            }
+
+            $sOutPath = \OxidEsales\Eshop\Core\Registry::getConfig()->getOutDir() . $sTheme . "/src/css/";
+            $sOutFile = $sOutPath .  $sOutputName;
+
+            file_put_contents($sOutFile, $css);
+        }
     }
 
     public function compilescripts() {
