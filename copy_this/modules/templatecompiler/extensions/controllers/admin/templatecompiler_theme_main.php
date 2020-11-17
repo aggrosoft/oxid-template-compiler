@@ -56,6 +56,10 @@ class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
             $sOutPath = \OxidEsales\Eshop\Core\Registry::getConfig()->getOutDir() . $sTheme . "/src/css/";
             $sOutFile = $sOutPath . 'styles.min.css';
 
+            if (!is_dir($sOutPath)) {
+                mkdir($sOutPath, 0777, true);
+            }
+
             file_put_contents($sOutFile, $css);
         }
 
@@ -85,6 +89,10 @@ class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
 
             $sOutPath = \OxidEsales\Eshop\Core\Registry::getConfig()->getOutDir() . $sTheme . "/src/css/";
             $sOutFile = $sOutPath .  $sOutputName;
+
+            if (!is_dir($sOutPath)) {
+                mkdir($sOutPath, 0777, true);
+            }
 
             file_put_contents($sOutFile, $css);
         }
