@@ -125,19 +125,11 @@ class templatecompiler_theme_main extends templatecompiler_theme_main_parent {
                 'build/vendor/jquery-flexslider2/js/jquery.flexslider.js',
                 'build/vendor/bootstrap-select/js/bootstrap-select.js',
                 'build/vendor/jquery-bootstrap-validation/js/jqBootstrapValidation.js',
-                'build/js/main.js'
-            ],
-            'pages/compare.min.js' => [
-                'build/js/pages/compare.js'
-            ],
-            'pages/details.min.js' => [
-                'build/js/pages/details.js'
-            ],
-            'pages/review.min.js' => [
-                'build/js/pages/review.js'
-            ],
-            'pages/start.min.js' => [
-                'build/js/pages/compare.js'
+                'build/js/main.js',
+                'build/js/pages/compare.js',
+                'build/js/pages/details.js',
+                'build/js/pages/review.js',
+                'build/js/pages/start.js'
             ]
         ];
 
